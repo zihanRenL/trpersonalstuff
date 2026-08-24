@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Illustration — Zihan Ren</title>
+<meta name="description" content="Original character illustration by Zihan (Terianno) Ren, with a written note behind every piece.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="page">
+
+<div class="statusbar">
+  <span class="sig">▮▮▯ CONNECTED</span>
+  <span class="hide-s">ZR — 03 / ILLUSTRATION</span>
+  <span class="spacer"></span>
+  <span id="clock">08/24  03:27</span>
+  <span class="batt"></span>
+</div>
+
+<nav class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="index.html">ZIHAN<span>/</span>REN</a>
+    <div class="nav-links">
+      <a href="index.html">Index</a>
+      <a href="index.html#profile">Profile</a>
+      <a href="work.html">Experience</a>
+      <a href="gallery.html" aria-current="page">Illustration</a>
+      <a href="https://0609nmb.lofter.com/" target="_blank" rel="noopener">Lofter ↗</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <header class="detail-head">
+    <div class="wrap">
+      <div class="crumb"><a href="index.html">Index</a> &nbsp;/&nbsp; Illustration</div>
+      <h1 class="display" style="font-size:clamp(26px,5vw,50px)">ILLUSTRATION</h1>
+      <div class="jp">イラストレーション・ギャラリー</div>
+      <p class="lead" style="margin-top:18px">
+        Original character work and fan illustration, drawn between 2023 and 2025.
+        Every piece opens into the notes behind it — what I was building, and what I was after.
+      </p>
+      <div class="btn-row">
+        <a class="btn ghost" href="https://0609nmb.lofter.com/" target="_blank" rel="noopener">More on Lofter ↗</a>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="wrap">
+      <div class="label">Gallery</div>
+      <div class="gal" id="gal"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div>
+      <div class="brand" style="font-size:18px">ZIHAN<span>/</span>REN</div>
+      <p class="small muted" style="margin-top:10px;max-width:34ch">
+        Engineering, psychology, and a great deal of blue.
+      </p>
+    </div>
+    <div class="cols">
+      <div class="col">
+        <span>Site</span>
+        <p class="small" style="margin:0">
+          <a href="index.html">Index</a><br>
+          <a href="work.html">Experience</a><br>
+          <a href="gallery.html">Illustration</a>
+        </p>
+      </div>
+      <div class="col">
+        <span>Elsewhere</span>
+        <p class="small" style="margin:0">
+          <a href="https://0609nmb.lofter.com/" target="_blank" rel="noopener">Lofter ↗</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+(function(){
+  const host = document.getElementById("gal");
+  ARTWORKS.forEach((a, i) => {
+    const card = document.createElement("a");
+    card.className = "card";
+    card.href = "art.html?id=" + a.id;
+    card.innerHTML =
+      `<div class="thumb"></div>
+       <div class="meta">
+         <div class="date">No.${String(i+1).padStart(2,"0")} — ${esc(a.date)}</div>
+         <h3 style="margin-top:6px">${esc(a.title)}</h3>
+         <p class="tagline">${esc(a.tagline)}</p>
+       </div>`;
+    host.appendChild(card);
+    mountArtImage(card.querySelector(".thumb"), a);
+  });
+})();
+</script>
+</body>
+</html>

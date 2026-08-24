@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Illustration — Zihan Ren</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="page">
+
+<div class="statusbar">
+  <span class="sig">▮▮▯ CONNECTED</span>
+  <span class="hide-s" id="sb">ZR — PLATE</span>
+  <span class="spacer"></span>
+  <span id="clock">08/24  03:27</span>
+  <span class="batt"></span>
+</div>
+
+<nav class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="index.html">ZIHAN<span>/</span>REN</a>
+    <div class="nav-links">
+      <a href="index.html">Index</a>
+      <a href="index.html#profile">Profile</a>
+      <a href="work.html">Experience</a>
+      <a href="gallery.html" aria-current="page">Illustration</a>
+      <a href="https://0609nmb.lofter.com/" target="_blank" rel="noopener">Lofter ↗</a>
+    </div>
+  </div>
+</nav>
+
+<main id="main"></main>
+
+<footer>
+  <div class="wrap foot">
+    <div>
+      <div class="brand" style="font-size:18px">ZIHAN<span>/</span>REN</div>
+      <p class="small muted" style="margin-top:10px;max-width:34ch">
+        Engineering, psychology, and a great deal of blue.
+      </p>
+    </div>
+    <div class="cols">
+      <div class="col">
+        <span>Site</span>
+        <p class="small" style="margin:0">
+          <a href="index.html">Index</a><br>
+          <a href="work.html">Experience</a><br>
+          <a href="gallery.html">Illustration</a>
+        </p>
+      </div>
+      <div class="col">
+        <span>Elsewhere</span>
+        <p class="small" style="margin:0">
+          <a href="https://0609nmb.lofter.com/" target="_blank" rel="noopener">Lofter ↗</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+(function(){
+  const main = document.getElementById("main");
+  const id = qs("id");
+  const i = ARTWORKS.findIndex(a => a.id === id);
+
+  if(i < 0){
+    main.innerHTML =
+      `<section><div class="wrap">
+         <div class="label">Error 404</div>
+         <h1 class="display">PLATE<br>NOT FOUND</h1>
+         <p class="lead">That piece isn't in this gallery.</p>
+         <div class="btn-row"><a class="btn" href="gallery.html">Back to gallery ▸</a></div>
+       </div></section>`;
+    return;
+  }
+
+  const a    = ARTWORKS[i];
+  const prev = ARTWORKS[(i - 1 + ARTWORKS.length) % ARTWORKS.length];
+  const next = ARTWORKS[(i + 1) % ARTWORKS.length];
+
+  document.title = a.title + " — Zihan Ren";
+  document.getElementById("sb").textContent = "ZR — PLATE / " + String(i+1).padStart(2,"0");
+
+  main.innerHTML = `
+    <header class="detail-head">
+      <div class="wrap">
+        <div class="crumb">
+          <a href="index.html">Index</a> &nbsp;/&nbsp;
+          <a href="gallery.html">Illustration</a> &nbsp;/&nbsp; ${esc(a.id)}
+        </div>
+        <div class="label">Plate ${String(i+1).padStart(2,"0")}</div>
+        <h1 class="display" style="font-size:clamp(24px,4.6vw,44px)">${esc(a.title)}</h1>
+        <div class="metaline">
+          <span><b>DATE</b> &nbsp;${esc(a.date)}</span>
+          <span><b>MEDIUM</b> &nbsp;${esc(a.medium)}</span>
+        </div>
+      </div>
+    </header>
+
+    <section>
+      <div class="wrap artview">
+        <div class="artframe bracket">
+          <div class="thumb-host"></div>
+          <div class="cap">${esc(a.title)} — ${esc(a.date)}</div>
+        </div>
+
+        <div>
+          <p class="lead" style="font-size:18px">${esc(a.tagline)}</p>
+          <div class="label" style="margin-top:30px">Notes</div>
+          ${a.notes.map(n => `<p>${esc(n)}</p>`).join("")}
+
+          <div class="label" style="margin-top:30px">Palette</div>
+          <div class="stack" style="gap:0;margin-bottom:22px">
+            ${a.palette.map(c => `<span title="${esc(c)}" style="width:46px;height:34px;background:${esc(c)};border:1px solid rgba(255,255,255,.4)"></span>`).join("")}
+          </div>
+
+          <div class="callout">
+            <div class="label">Aside</div>
+            <p style="margin:0">${esc(a.aside)}</p>
+          </div>
+
+          <div class="btn-row" style="margin-top:22px">
+            <a class="btn ghost" href="gallery.html">◀ All illustration</a>
+            <a class="btn" href="https://0609nmb.lofter.com/" target="_blank" rel="noopener">Lofter ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="wrap">
+        <div class="pager">
+          <a href="art.html?id=${prev.id}">◀ ${esc(prev.title)}</a>
+          <a href="art.html?id=${next.id}">${esc(next.title)} ▶</a>
+        </div>
+      </div>
+    </section>`;
+
+  mountArtImage(main.querySelector(".thumb-host"), a);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Record — Zihan Ren</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="page">
+
+<div class="statusbar">
+  <span class="sig">▮▮▯ CONNECTED</span>
+  <span class="hide-s" id="sb">ZR — RECORD</span>
+  <span class="spacer"></span>
+  <span id="clock">08/24  03:27</span>
+  <span class="batt"></span>
+</div>
+
+<nav class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="index.html">ZIHAN<span>/</span>REN</a>
+    <div class="nav-links">
+      <a href="index.html">Index</a>
+      <a href="index.html#profile">Profile</a>
+      <a href="work.html" aria-current="page">Experience</a>
+      <a href="gallery.html">Illustration</a>
+      <a href="https://0609nmb.lofter.com/" target="_blank" rel="noopener">Lofter ↗</a>
+    </div>
+  </div>
+</nav>
+
+<main id="main"></main>
+
+<footer>
+  <div class="wrap foot">
+    <div>
+      <div class="brand" style="font-size:18px">ZIHAN<span>/</span>REN</div>
+      <p class="small muted" style="margin-top:10px;max-width:34ch">
+        Engineering, psychology, and a great deal of blue.
+      </p>
+    </div>
+    <div class="cols">
+      <div class="col">
+        <span>Site</span>
+        <p class="small" style="margin:0">
+          <a href="index.html">Index</a><br>
+          <a href="work.html">Experience</a><br>
+          <a href="gallery.html">Illustration</a>
+        </p>
+      </div>
+      <div class="col">
+        <span>Elsewhere</span>
+        <p class="small" style="margin:0">
+          <a href="https://0609nmb.lofter.com/" target="_blank" rel="noopener">Lofter ↗</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+(function(){
+  const main = document.getElementById("main");
+  const id = qs("id");
+  const i = ENTRIES.findIndex(e => e.id === id);
+
+  if(i < 0){
+    main.innerHTML =
+      `<section><div class="wrap">
+         <div class="label">Error 404</div>
+         <h1 class="display">RECORD<br>NOT FOUND</h1>
+         <p class="lead">That file isn't in this directory.</p>
+         <div class="btn-row"><a class="btn" href="work.html">Back to experience ▸</a></div>
+       </div></section>`;
+    return;
+  }
+
+  const e    = ENTRIES[i];
+  const prev = ENTRIES[(i - 1 + ENTRIES.length) % ENTRIES.length];
+  const next = ENTRIES[(i + 1) % ENTRIES.length];
+  const cat  = CATS.find(c => c.key === e.cat).name;
+
+  document.title = e.title + " — Zihan Ren";
+  document.getElementById("sb").textContent = "ZR — RECORD / " + e.id.toUpperCase();
+
+  main.innerHTML = `
+    <header class="detail-head">
+      <div class="wrap">
+        <div class="crumb">
+          <a href="index.html">Index</a> &nbsp;/&nbsp;
+          <a href="work.html">Experience</a> &nbsp;/&nbsp;
+          <a href="work.html?cat=${e.cat}">${esc(cat)}</a> &nbsp;/&nbsp; ${esc(e.id)}
+        </div>
+        <div class="label">${esc(cat)} record</div>
+        <h1 class="display" style="font-size:clamp(24px,4.4vw,42px)">${esc(e.title)}</h1>
+        <div class="metaline">
+          <span><b>ORG</b> &nbsp;${esc(e.org)}</span>
+          <span><b>ROLE</b> &nbsp;${esc(e.role)}</span>
+          <span><b>PERIOD</b> &nbsp;${esc(e.date)}</span>
+          ${e.advisor ? `<span><b>ADVISOR</b> &nbsp;${esc(e.advisor)}</span>` : ""}
+        </div>
+      </div>
+    </header>
+
+    <section>
+      <div class="wrap two">
+        <div>
+          <p class="lead" style="font-size:18px">${esc(e.summary)}</p>
+          <div class="label" style="margin-top:34px">What I did</div>
+          <ul class="bullets">
+            ${e.body.map(b => `<li>${esc(b)}</li>`).join("")}
+          </ul>
+          ${e.result ? `<div class="callout"><div class="label">Result</div><p style="margin:0">${esc(e.result)}</p></div>` : ""}
+        </div>
+
+        <aside>
+          <div class="win bracket">
+            <div class="win-bar"><span>META.dat</span><span class="dots"><i></i><i></i><i></i></span></div>
+            <div class="win-body">
+              <div class="label" style="margin-bottom:10px">Category</div>
+              <p class="small" style="margin:0 0 20px">${esc(cat)}</p>
+              <div class="label" style="margin-bottom:10px">Tools &amp; methods</div>
+              <div class="stack">${e.tags.map(t => `<span class="chip">${esc(t)}</span>`).join("")}</div>
+            </div>
+          </div>
+          <div class="btn-row" style="margin-top:22px">
+            <a class="btn ghost" href="work.html">◀ All records</a>
+          </div>
+        </aside>
+      </div>
+
+      <div class="wrap">
+        <div class="pager">
+          <a href="entry.html?id=${prev.id}">◀ ${esc(prev.title)}</a>
+          <a href="entry.html?id=${next.id}">${esc(next.title)} ▶</a>
+        </div>
+      </div>
+    </section>`;
+})();
+</script>
+</body>
+</html>
