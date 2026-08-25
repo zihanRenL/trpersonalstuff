@@ -363,3 +363,53 @@ footer{
 .artframe .thumb-host{ min-height:320px; display:block; }
 .artframe .thumb-host img{ width:auto; max-width:100%; max-height:74vh; height:auto; margin:0 auto; }
 .ph{ min-height:260px; }
+
+/* ---------- portfolio detail: about block, sections, figures ---------- */
+.about{
+  border-left:2px solid var(--cyan);
+  padding:2px 0 2px 20px;
+  margin:32px 0 8px;
+}
+.about p{ font-size:14px; opacity:.9; max-width:62ch; }
+.linkrow{ display:flex; gap:18px; flex-wrap:wrap; margin-bottom:4px; }
+.linkrow a{
+  font-size:11.5px; letter-spacing:.14em; text-transform:uppercase;
+  text-decoration:none; color:var(--cyan); border-bottom:1px solid transparent;
+}
+.linkrow a:hover{ border-bottom-color:var(--cyan); }
+
+.sec{ padding:30px 0 0; }
+.sec p{ max-width:66ch; }
+.sec .bullets{ margin-top:14px; }
+
+.fig{
+  margin:22px 0 0;
+  border:1px solid var(--line-strong);
+  background:var(--paper);
+  padding:10px;
+}
+.fig img{ width:100%; height:auto; }
+.fig figcaption{
+  color:var(--ink); opacity:.7;
+  font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+  padding:10px 4px 2px;
+}
+.fig-wide{ background:var(--white); }
+
+.figgrid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:16px; margin-top:22px; align-items:start;
+}
+.figgrid .fig{ margin:0; }
+
+@media (max-width:900px){
+  .figgrid{ grid-template-columns:1fr; }
+}
+
+/* ---------- case-study layout (portfolio records) ---------- */
+.case{ max-width:940px; }
+.case > .lead, .case .sec p, .case .sec .bullets, .case .about p{ max-width:68ch; }
+.case .fig{ margin-top:26px; }
+.case .sec{ padding-top:38px; }
+.toolstrip{ margin-top:46px; padding-top:26px; border-top:1px solid var(--line); }
+.pager{ margin-bottom:10px; }

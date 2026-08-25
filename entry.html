@@ -40,7 +40,7 @@
     <div>
       <div class="brand" style="font-size:18px">ZIHAN<span>/</span>REN</div>
       <p class="small muted" style="margin-top:10px;max-width:34ch">
-        Engineering, psychology, and a great deal of blue.
+        Engineering, psychology, painting, and design.
       </p>
     </div>
     <div class="cols">
@@ -66,6 +66,35 @@
 <script src="assets/js/main.js"></script>
 <script>
 (function(){
+  const fig = f => `
+    <figure class="fig${f.wide ? " fig-wide" : ""}">
+      <img src="${esc(f.src)}" alt="${esc(f.cap || "")}" loading="lazy">
+      ${f.cap ? `<figcaption>${esc(f.cap)}</figcaption>` : ""}
+    </figure>`;
+
+  window.renderAbout = a => {
+    if(!a) return "";
+    return `
+      <div class="about">
+        <div class="label">About the platform</div>
+        <p>${esc(a.text)}</p>
+        ${a.links ? `<div class="linkrow">${a.links.map(l =>
+          `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} \u2197</a>`).join("")}</div>` : ""}
+        ${a.fig ? fig(a.fig) : ""}
+      </div>`;
+  };
+
+  window.renderSection = sec => `
+    <section class="sec">
+      <div class="label">${esc(sec.h)}</div>
+      ${(sec.p || []).map(p => `<p>${esc(p)}</p>`).join("")}
+      ${sec.list ? `<ul class="bullets">${sec.list.map(l => `<li>${esc(l)}</li>`).join("")}</ul>` : ""}
+      ${sec.fig ? fig(sec.fig) : ""}
+      ${sec.figs ? `<div class="figgrid">${sec.figs.map(fig).join("")}</div>` : ""}
+    </section>`;
+})();
+
+(function(){
   const main = document.getElementById("main");
   const id = qs("id");
   const i = ENTRIES.findIndex(e => e.id === id);
@@ -89,7 +118,9 @@
   document.title = e.title + " — Zihan Ren";
   document.getElementById("sb").textContent = "ZR — RECORD / " + e.id.toUpperCase();
 
-  main.innerHTML = `
+  const isCase = !!e.sections;
+
+  const header = `
     <header class="detail-head">
       <div class="wrap">
         <div class="crumb">
@@ -104,10 +135,31 @@
           <span><b>ROLE</b> &nbsp;${esc(e.role)}</span>
           <span><b>PERIOD</b> &nbsp;${esc(e.date)}</span>
           ${e.advisor ? `<span><b>ADVISOR</b> &nbsp;${esc(e.advisor)}</span>` : ""}
+          ${e.collab ? `<span><b>TEAM</b> &nbsp;${esc(e.collab)}</span>` : ""}
         </div>
       </div>
-    </header>
+    </header>`;
 
+  const tools = `
+    <div class="toolstrip">
+      <div class="label">Tools &amp; methods</div>
+      <div class="stack">${e.tags.map(t => `<span class="chip">${esc(t)}</span>`).join("")}</div>
+    </div>`;
+
+  const caseBody = () => `
+    <section>
+      <div class="wrap case">
+        <p class="lead" style="font-size:20px">${esc(e.summary)}</p>
+        ${renderAbout(e.about)}
+        ${e.sections.map(renderSection).join("")}
+        ${tools}
+        <div class="btn-row" style="margin-top:26px">
+          <a class="btn ghost" href="work.html">\u25c0 All records</a>
+        </div>
+      </div>
+    </section>`;
+
+  const twoColBody = () => `
     <section>
       <div class="wrap two">
         <div>
@@ -130,18 +182,21 @@
             </div>
           </div>
           <div class="btn-row" style="margin-top:22px">
-            <a class="btn ghost" href="work.html">◀ All records</a>
+            <a class="btn ghost" href="work.html">\u25c0 All records</a>
           </div>
         </aside>
       </div>
-
-      <div class="wrap">
-        <div class="pager">
-          <a href="entry.html?id=${prev.id}">◀ ${esc(prev.title)}</a>
-          <a href="entry.html?id=${next.id}">${esc(next.title)} ▶</a>
-        </div>
-      </div>
     </section>`;
+
+  const pager = `
+    <div class="wrap">
+      <div class="pager">
+        <a href="entry.html?id=${prev.id}">\u25c0 ${esc(prev.title)}</a>
+        <a href="entry.html?id=${next.id}">${esc(next.title)} \u25b6</a>
+      </div>
+    </div>`;
+
+  main.innerHTML = header + (isCase ? caseBody() : twoColBody()) + pager;
 })();
 </script>
 </body>

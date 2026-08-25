@@ -20,42 +20,114 @@ const ENTRIES = [
     tags: ["Behavioral Data", "Segmentation", "Stakeholder Coordination", "Field Research"]
   },
   {
-    id: "wordplay-color",
-    cat: "research",
-    title: "Cross-cultural Color Accessibility for Screen Reader Users",
-    org: "Wordplay · UW iSchool",
-    date: "Sep 2024 — Mar 2025",
-    role: "Research Assistant",
-    advisor: "Prof. Amy J. Ko",
-    summary:
-      "Modeling how color is named across languages, so a screen reader can describe it to someone who has never seen it.",
-    body: [
-      "Conducted research on color accessibility for screen reader users through literature review and hands-on exploration of screen reader functionality, mapping the interaction patterns and accessibility barriers that show up in real use.",
-      "Analyzed color perception patterns in R using cluster analysis and perceptual boundary mapping, referencing the World Color Survey dataset to model 11 universal basic color categories.",
-      "Developed a cross-cultural research proposal examining multilingual users' color perception, and designed a Figma prototype demonstrating accessible digital typography interfaces."
-    ],
-    result:
-      "Identified 11 basic color clusters based on perceptual coordinate boundaries — a vocabulary a screen reader can actually speak.",
-    tags: ["R", "Cluster Analysis", "World Color Survey", "Accessibility", "Figma"]
-  },
-  {
     id: "wordplay-emoji",
     cat: "research",
-    title: "Emoji Accessibility for Screen Reader Users",
-    org: "Wordplay · UW iSchool",
-    date: "Sep 2024 — Mar 2025",
-    role: "Research Assistant",
+    title: "Crowdsourced Emoji Descriptions for Accessible, Multilingual Search",
+    org: "Wordplay Research Studio \u00b7 UW iSchool",
+    date: "Jan \u2014 Mar 2025",
+    role: "Research & Design Proposal Lead",
+    advisor: "Prof. Amy J. Ko",
+    collab: "with Monica Xu",
+    summary:
+      "Unicode describes \uD83D\uDE2D as \u201cloudly crying face.\u201d A screen reader user needs \u201csad.\u201d We designed a game to crowdsource the difference \u2014 in every language.",
+    about: {
+      text:
+        "Wordplay is a free programming-learning platform for multilingual K-12 students, led by Amy J. Ko, associate dean at the UW-Seattle iSchool. It aims to build an inclusive and accessible coding classroom.",
+      links: [
+        { label: "wordplay.dev", url: "https://wordplay.dev/" },
+        { label: "Prof. Amy J. Ko", url: "https://faculty.washington.edu/ajko/" }
+      ],
+      fig: { src: "assets/img/wordplay-home.jpg", cap: "Wordplay \u2014 accessible, multilingual, creative coding." }
+    },
+    sections: [
+      {
+        h: "The problem",
+        p: [
+          "Wordplay is a justice-centered platform for teaching K-12 students to code, and it uses emoji throughout its interface \u2014 as icons, as user avatars, and as parts of the programming language itself. But standard Unicode emoji descriptions are appearance-based and English-centric: \uD83D\uDE2D is described as \u201cloudly crying face\u201d rather than something more useful, like \u201csad.\u201d",
+          "That breaks two things at once. Screen reader users get descriptions that are slow to parse, and search results shift depending on which word someone happens to type \u2014 \u201csmile\u201d and \u201chappy\u201d return different sets. No comprehensive, accessible, multilingual dataset of emoji descriptions existed to fix it."
+        ]
+      },
+      {
+        h: "Research process",
+        p: [
+          "I led the research phase, synthesizing literature across three areas to ground the design: accessibility barriers for blind programmers (screen readers process information linearly, which makes concise descriptions essential), computational approaches to emoji emotion classification (Ekman\u2019s six basic emotions, Plutchik\u2019s expanded model), and psycholinguistic norms for how people actually perceive emoji meaning across cultures.",
+          "I brought those threads together to argue for an emotion-first, taxonomy-based approach \u2014 while naming its limits honestly: not every emoji conveys an emotion (\uD83C\uDF4E), and some carry subcultural meanings no emotion framework captures (\uD83C\uDF46, \uD83D\uDC80)."
+        ]
+      },
+      {
+        h: "Design proposal",
+        p: [
+          "Building on that research, I co-authored a formal proposal for a \u201cFun Emoji Quiz\u201d \u2014 a game that crowdsources high-quality, culturally grounded descriptions through play instead of top-down labeling. The design decisions I contributed:"
+        ],
+        list: [
+          "A four-tier taxonomy for what makes a good description \u2014 emotional, conceptual/object-based, cultural/subcultural, and identity/representation-based \u2014 so one emoji can hold several valid, context-dependent descriptions.",
+          "A mechanic built on Chinese and Japanese four-character idioms, where each logographic character maps cleanly onto a single emoji. Intuitive for a K-12 multilingual audience, and especially rich in Mandarin, where homonyms open up wordplay.",
+          "A validation loop for alphabet-based languages: high-frequency descriptions collected from logographic-language users become multiple-choice options for English and Spanish speakers, so the dataset can scale past Chinese and Japanese.",
+          "The data pipeline itself \u2014 how frequency analysis, error clustering, and cross-linguistic variance mapping turn raw guesses into a structured, taxonomy-based description repository."
+        ],
+        fig: {
+          src: "assets/img/wordplay-quiz.jpg",
+          cap: "The ESP-style game prototype \u2014 a Spanish validation round built from descriptions collected in Chinese and Japanese."
+        }
+      },
+      {
+        h: "Outcome & reflection",
+        p: [
+          "Our faculty advisor judged the research depth as meeting the bar for course credit, and used the proposal to identify the open design questions standing between the concept and a buildable feature: where quiz content originates, how correctness is validated at scale, and whether emoji-sequence guesses reliably reflect single-emoji meaning.",
+          "I don\u2019t read that as a limitation. Mapping the design space and stress-testing its core assumptions was the job; the questions we surfaced became the roadmap for the next phase."
+        ]
+      }
+    ],
+    tags: ["Literature Synthesis", "Research Proposal Writing", "Taxonomy Design", "Cross-cultural Research", "Accessibility Research", "Stakeholder Communication"]
+  },
+  {
+    id: "wordplay-color",
+    cat: "research",
+    title: "Localized Color Descriptions for Screen Reader Accessibility",
+    org: "Wordplay Research Studio \u00b7 UW iSchool",
+    date: "Jul 2023 \u2014 Mar 2025",
+    role: "Independent Design Proposal",
     advisor: "Prof. Amy J. Ko",
     summary:
-      "If an emoji carries the feeling of a sentence, what happens when it is read aloud — and does it survive translation?",
-    body: [
-      "Designed a Figma prototype exploring how emoji can support emotional expression and accessibility in digital communication.",
-      "Conducted secondary research on existing emoji classification systems and their emotional mapping to identify usability barriers for screen reader users.",
-      "Collaborated with an interdisciplinary team of informatics, education, and accessibility researchers to sharpen the research questions and methodology."
+      "A screen reader that reads out raw LCH coordinates is precise and useless. I went looking for where the color words actually sit.",
+    about: {
+      text:
+        "Wordplay is a free programming-learning platform for multilingual K-12 students, led by Amy J. Ko, associate dean at the UW-Seattle iSchool. It aims to build an inclusive and accessible coding classroom.",
+      links: [
+        { label: "wordplay.dev", url: "https://wordplay.dev/" },
+        { label: "Prof. Amy J. Ko", url: "https://faculty.washington.edu/ajko/" }
+      ],
+      fig: { src: "assets/img/wordplay-home.jpg", cap: "Wordplay \u2014 accessible, multilingual, creative coding." }
+    },
+    sections: [
+      {
+        h: "The problem",
+        p: [
+          "Wordplay\u2019s screen reader described colors using raw LCH color-space coordinates \u2014 precise, and meaningless to a blind or low-vision user trying to grasp which color has been selected. The team needed a way to translate those coordinates into natural color words, consistently, across every language Wordplay supports."
+        ]
+      },
+      {
+        h: "Research process",
+        p: [
+          "I led the literature review, grounding the design in established color science. Starting from Berlin and Kay\u2019s foundational work on Basic Color Terms and the World Color Survey \u2014 which sampled color-naming behavior across 110 languages using standardized Munsell chips \u2014 I found strong evidence that color categorization is not purely language-specific: naming patterns cluster around 11 universally recognized categories (black, white, gray, red, yellow, green, blue, brown, purple, pink, orange), later confirmed for Mandarin specifically by Hsieh et al.\u2019s 2020 cluster analysis of Taiwanese participants.",
+          "I also surfaced where the science gets harder. Boundary colors resist clean categorization across cultures \u2014 Japanese \u9752 (ao) has historically spanned both blue and green, and its meaning still shifts with context today. Any design built on fixed category boundaries would have to account for real linguistic ambiguity rather than assigning every color one \u201ccorrect\u201d label."
+        ]
+      },
+      {
+        h: "Navigating an open research gap",
+        p: [
+          "The core challenge was translating focal colors \u2014 the World Color Survey\u2019s term for a category\u2019s best representative example \u2014 into concrete HCL coordinates the system could use. No literature I found provided that mapping directly.",
+          "Rather than stall, I proposed a workaround: use Adobe\u2019s color palette, precisely calibrated and built for a global user base, as a proxy reference for focal colors, converting its RGB/CMYK values into HCL as a starting point. I also identified the survey\u2019s own foci.txt and chip.txt datasets as a path to deriving focal coordinates rigorously from the original data, and proposed a threshold-based method in HCL space for classifying ambiguous boundary colors."
+        ]
+      },
+      {
+        h: "Outcome",
+        p: [
+          "The research fed directly into the team\u2019s design specification for locale-aware color descriptions, moving the project from \u201cwe have a problem\u201d to \u201chere is where the category boundaries should sit, and why.\u201d It carried on into the broader Unicode glyph accessibility initiative I kept working on with the same research group."
+        ]
+      }
     ],
-    result:
-      "Designed and prototyped an interactive mini-game testing cross-linguistic interpretations of emoji across English, Japanese, and Chinese users.",
-    tags: ["Figma", "Prototyping", "Cross-linguistic Study", "Accessibility"]
+    tags: ["Academic Literature Review", "Psycholinguistic Synthesis", "Color Science", "HCL / LCH", "Accessibility Research", "Technical Communication"]
   },
   {
     id: "caregiver",
@@ -149,17 +221,61 @@ const ENTRIES = [
   {
     id: "merch",
     cat: "creative",
-    title: "Merchandise Design",
-    org: "ACG Goods · Independent",
-    date: "Dec 2020 — Present",
+    title: "OC Merchandise Design",
+    org: "Independent \u00b7 OC Goods",
+    date: "Dec 2020 \u2014 Present",
     role: "Designer",
     summary:
-      "Taking a drawing off the screen and into acrylic, paper, and cloth — where the tolerances are real.",
-    body: [
-      "Used Photoshop and Illustrator to design ACG-inspired merchandise.",
-      "Collaborated with manufacturers to review mockups and prototype samples, adjusting artwork for print, cut lines, and material behavior."
+      "I don\u2019t only draw my original characters \u2014 I turn them into objects you can hold, and I stay in it through the manufacturing.",
+    about: {
+      text:
+        "Designed in Adobe Illustrator and Photoshop, with materials and construction considered from the first sketch, then produced in direct coordination with manufacturers \u2014 mockups, prototype samples, and print corrections \u2014 so each character ends up with a distinct, tangible product identity."
+    },
+    sections: [
+      {
+        h: "The character",
+        p: [
+          "The piece below is built around Mingche Shan, a genetically synthesized experimental subject whose defining trait is how strangely he processes and understands emotion. That premise sets the visual direction: clinical, technological, medical.",
+          "Some earlier design work I had done for him \u2014 an experimental blood pack, complete with handling warnings and a track record of what the lab had taken from him:"
+        ],
+        fig: {
+          src: "assets/img/merch-early.jpg",
+          cap: "Earlier merchandise design for Mingche Shan \u2014 an experimental blood-pack pouch, front and back.",
+          wide: true
+        }
+      },
+      {
+        h: "Designing the cassette",
+        p: [
+          "For the charm itself I chose a cassette tape, and studied the real object closely before drawing anything \u2014 the A and B sides, the hidden tracks, the way the shell reads as a container for something recorded and not quite retrievable.",
+          "I built the piece on the tape\u2019s signature red, keeping red and pink dominant, and used the reel holes structurally: the left hole sits exactly at Mingche Shan\u2019s neck. Scattered red noise and glitch blocks suggest technological malfunction, and the red threads running off the left edge read as both bloodstream and wiring \u2014 the idea being that he is still conscious inside the lab."
+        ],
+        figs: [
+          { src: "assets/img/merch-tape-a.jpg", cap: "Side A \u2014 Laboratory" },
+          { src: "assets/img/merch-tape-b.jpg", cap: "Side B \u2014 ???" }
+        ]
+      },
+      {
+        h: "Typography and the track list",
+        p: [
+          "To hold the clinical, lab-report atmosphere I set most of the text in a plain sans-serif close to Arial, and used Bender for the \u201c04\u201d so the subject number reads as geometric and technical rather than decorative.",
+          "A cassette prints its track list down the right side, so I used that space to list the experiments performed on him \u2014 \u201cFirst contact with ordinary children,\u201d \u201cSchool episodes\u201d \u2014 as if they were song titles. Toward the end the list collapses into [BROKEN], which echoes the disintegrating red pixel effect under \u201cinsert to watch\u201d below it.",
+          "The back goes one step further in: I drew Mingche Shan holding this same cassette, already shattered, looking into the distance through one of its reel holes."
+        ]
+      },
+      {
+        h: "The finished piece",
+        p: [
+          "Printed on clear acrylic, assembled with a rose-gold clasp, and small enough to hang off a bag."
+        ],
+        figs: [
+          { src: "assets/img/merch-photo-a.jpg", cap: "Side A, printed" },
+          { src: "assets/img/merch-photo-b.jpg", cap: "Side B, printed" },
+          { src: "assets/img/merch-photo-desk.jpg", cap: "With the rest of the shelf" }
+        ]
+      }
     ],
-    tags: ["Photoshop", "Illustrator", "Print Production", "Prototyping"]
+    tags: ["Adobe Illustrator", "Photoshop", "Acrylic Print Production", "Manufacturer Coordination", "Typography", "Character Design"]
   },
   {
     id: "barista",
