@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Experience — Zihan Ren</title>
+<meta name="description" content="Work, research, and course projects by Zihan (Terianno) Ren.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="page">
+
+<div class="statusbar">
+  <span class="sig">▮▮▯ CONNECTED</span>
+  <span class="hide-s">ZR — 02 / EXPERIENCE</span>
+  <span class="spacer"></span>
+  <span id="clock">08/24  03:27</span>
+  <span class="batt"></span>
+</div>
+
+<nav class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="index.html">ZIHAN<span>/</span>REN</a>
+    <div class="nav-links">
+      <a href="index.html">Index</a>
+      <a href="index.html#profile">Profile</a>
+      <a href="work.html" aria-current="page">Experience</a>
+      <a href="gallery.html">Illustration</a>
+      <a href="https://0609nmb.lofter.com/" target="_blank" rel="noopener">Lofter ↗</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <header class="detail-head">
+    <div class="wrap">
+      <div class="crumb"><a href="index.html">Index</a> &nbsp;/&nbsp; Experience</div>
+      <h1 class="display" style="font-size:clamp(26px,5vw,50px)">EXPERIENCE</h1>
+      <div class="jp">エクスペリエンス・ディレクトリ</div>
+      <p class="lead" style="margin-top:18px">
+        Everything below opens. Ten entries across work, research, course projects, and the
+        creative practice that has run alongside all of it since 2020.
+      </p>
+    </div>
+  </header>
+
+  <section>
+    <div class="wrap">
+      <div class="tabs" id="tabs"></div>
+      <div class="win bracket">
+        <div class="win-bar">
+          <span id="dirname">/ EXPERIENCE — ALL</span>
+          <span class="dots"><i></i><i></i><i></i></span>
+        </div>
+        <div class="rows" id="rows" style="border:0"></div>
+      </div>
+      <p class="small muted" style="margin-top:16px">▸ Select any row to open the full record.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div>
+      <div class="brand" style="font-size:18px">ZIHAN<span>/</span>REN</div>
+      <p class="small muted" style="margin-top:10px;max-width:34ch">
+        Engineering, psychology, painting, and design.
+      </p>
+    </div>
+    <div class="cols">
+      <div class="col">
+        <span>Site</span>
+        <p class="small" style="margin:0">
+          <a href="index.html">Index</a><br>
+          <a href="work.html">Experience</a><br>
+          <a href="gallery.html">Illustration</a>
+        </p>
+      </div>
+      <div class="col">
+        <span>Elsewhere</span>
+        <p class="small" style="margin:0">
+          <a href="https://0609nmb.lofter.com/" target="_blank" rel="noopener">Lofter ↗</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+(function(){
+  const tabsEl = document.getElementById("tabs");
+  const rowsEl = document.getElementById("rows");
+  const dirEl  = document.getElementById("dirname");
+  let active = qs("cat") || "all";
+  if(!CATS.some(c => c.key === active)) active = "all";
+
+  function render(){
+    tabsEl.innerHTML = "";
+    CATS.forEach(c => {
+      const b = document.createElement("button");
+      b.className = "tab" + (c.key === active ? " on" : "");
+      b.textContent = c.name;
+      b.onclick = () => {
+        active = c.key;
+        history.replaceState(null, "", c.key === "all" ? "work.html" : "work.html?cat=" + c.key);
+        render();
+      };
+      tabsEl.appendChild(b);
+    });
+
+    const list = ENTRIES.filter(e => active === "all" || e.cat === active);
+    dirEl.textContent = "/ EXPERIENCE — " + (CATS.find(c => c.key === active).name.toUpperCase()) +
+                        "  (" + list.length + ")";
+
+    rowsEl.innerHTML = "";
+    list.forEach((e, i) => {
+      const a = document.createElement("a");
+      a.className = "row";
+      a.href = "entry.html?id=" + e.id;
+      a.innerHTML =
+        `<span class="no">${String(i+1).padStart(2,"0")}</span>
+         <span class="ttl">${esc(e.title)}<span class="sub">${esc(e.role)}</span></span>
+         <span class="org">${esc(e.org)}</span>
+         <span class="date">${esc(e.date)}</span>
+         <span class="arr">▸</span>`;
+      rowsEl.appendChild(a);
+    });
+  }
+  render();
+})();
+</script>
+</body>
+</html>
