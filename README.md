@@ -29,7 +29,20 @@ art.html?id=…     one illustration, with the notes behind it
 assets/js/data.js ← ALL TEXT LIVES HERE
 assets/css/style.css
 assets/art/       illustration files
+fridge/           冰箱食材过期提醒 — a self-contained PWA (see fridge/README.md)
 ```
+
+## 冰箱食材过期提醒 (fridge/)
+
+A separate little app living under `fridge/`, unrelated to the portfolio pages:
+it tracks how many days are left on everything in the fridge and colour-codes it
+red / orange / green so nothing quietly goes off. Responsive, installable to the
+home screen, and works out of the box storing data in the browser; fill in
+`fridge/config.js` with Supabase credentials to get a login and live sync between
+phone and laptop. Setup notes are in [`fridge/README.md`](fridge/README.md).
+
+It shares this repo's palette but has its own stylesheet and no dependency on
+`assets/`, so the two can be edited independently.
 
 ## Editing content
 
