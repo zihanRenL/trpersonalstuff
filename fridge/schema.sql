@@ -58,8 +58,22 @@ create trigger food_defaults_touch
   for each row execute function public.touch_updated_at();
 
 -- ---------------------------------------------------------
--- 4. 行级安全（RLS）
---    这是真正的门禁：没登录的人拿着 anon key 也读不到任何东西。
+-- 4. 表级授权（GRANT）
+--    新版 Supabase 项目不再自动给 public schema 下新建的表授予
+--    anon / authenticated 权限，所以用 SQL 建的表必须显式 GRANT，
+--    否则前端会报 "permission denied for table food_defaults"。
+--
+--    只给 authenticated，不给 anon —— 没登录的人连表都碰不到。
+--    GRANT 只是"能不能碰这张表"，"能碰到哪几行"由下面的 RLS 决定，
+--    两层都要有。
+-- ---------------------------------------------------------
+grant usage on schema public to authenticated;
+grant select, insert, update, delete on public.food_defaults   to authenticated;
+grant select, insert, update, delete on public.inventory_items to authenticated;
+
+-- ---------------------------------------------------------
+-- 5. 行级安全（RLS）
+--    这是真正的门禁：没登录的人拿着 publishable key 也读不到任何东西。
 -- ---------------------------------------------------------
 alter table public.food_defaults  enable row level security;
 alter table public.inventory_items enable row level security;
@@ -99,7 +113,7 @@ create policy inventory_items_delete on public.inventory_items
   for delete to authenticated using (user_id = auth.uid());
 
 -- ---------------------------------------------------------
--- 5. 打开实时推送（手机改一下，电脑上的页面立刻跟着变）
+-- 6. 打开实时推送（手机改一下，电脑上的页面立刻跟着变）
 --    表已经在发布列表里时 add 会报错，所以吞掉这个异常。
 -- ---------------------------------------------------------
 do $$
