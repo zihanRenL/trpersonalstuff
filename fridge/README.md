@@ -45,30 +45,50 @@ fridge/
    （勾上 auto confirm，省掉验证邮件）。
 4. 同一页的 **Authentication → Sign In / Providers**，把 **Allow new users to sign up** 关掉。
    这样除了你手动建的那个账号，别人注册不进来。
-5. 控制台 → **Project Settings → API**，抄下 **Project URL** 和 **anon public** key，填进 `config.js`：
+5. 抄两样东西填进 `config.js`。新版控制台把它们放在了两个不同的页面：
+
+   | 填什么 | 去哪找 | 长什么样 |
+   | --- | --- | --- |
+   | `SUPABASE_URL` | **Project Settings → Data API → Project URL** | `https://abcdefgh.supabase.co` |
+   | `SUPABASE_ANON_KEY` | **Project Settings → API Keys → Publishable key** | `sb_publishable_xxxxxxxx` |
 
    ```js
    window.FRIDGE_CONFIG = {
-     SUPABASE_URL: 'https://xxxxxxxx.supabase.co',
-     SUPABASE_ANON_KEY: 'eyJhbGciOi...'
+     SUPABASE_URL: 'https://abcdefgh.supabase.co',
+     SUPABASE_ANON_KEY: 'sb_publishable_xxxxxxxx'
    };
    ```
 
+   老项目的 API Keys 页面上没有 Publishable key，只有 **anon public**（一长串 `eyJ...`
+   开头的 JWT）。填那个也一样，两者作用完全相同，代码不用改。
+
 6. 提交、推上去。刷新页面就会先要求登录，登录后第一次会自动把 79 种预置食材灌进 `food_defaults`。
 
-**关于安全性，说清楚一点：** `anon key` 本来就是设计成公开给浏览器用的，写进仓库没问题；
+**关于安全性，说清楚一点：** Publishable key（旧称 anon key）本来就是设计成公开给浏览器用的，
+Supabase 自己也标着 "can be safely shared publicly"，写进仓库没问题；
 真正拦住外人的是 `schema.sql` 里的 RLS 策略 —— 没登录就一行数据都读不到。
 但页面本身（HTML / CSS / JS）在静态托管上永远是公开的，任何人打开网址都能看到登录框，
 只是看不到你的数据。想连登录框都藏起来，得换成有服务端的托管方式。
-另外**千万别**把 `service_role` key 填进 `config.js`，那个 key 能绕过所有 RLS。
+另外**千万别**把 **Secret key**（`sb_secret_...`，旧称 `service_role`）填进 `config.js`，
+那个 key 能绕过所有 RLS。它只该出现在服务端，这个项目从头到尾都不需要它。
 
 ## 部署
 
 这个仓库已经配了 GitHub Pages（`.github/workflows/pages.yml`，推 `main` 就自动发布），
-所以 `fridge/` 推上去之后直接访问 `https://<你的用户名>.github.io/trpersonalstuff/fridge/` 就行，
-不需要再上 Vercel。想换 Vercel、Netlify 也可以，把仓库根目录当静态站点发布即可，无需构建命令。
+所以把这个分支合进 `main` 之后，直接访问
+`https://zihanrenl.github.io/trpersonalstuff/fridge/` 就行，不需要再上 Vercel。
+
+第一次发布前先确认 GitHub 仓库 **Settings → Pages → Build and deployment → Source**
+选的是 **GitHub Actions**（workflow 里的 `enablement: true` 一般会自动打开它，
+但保险起见看一眼）。发布进度在仓库的 **Actions** 标签页里看。
+
+想换 Vercel、Netlify 也可以：把仓库根目录当静态站点发布即可，无需构建命令，
+入口路径同样是 `/fridge/`。
 
 PWA 要求 HTTPS，GitHub Pages 自带；本地调试用 `localhost` 也算安全上下文。
+
+**顺序建议**：先合进 `main` 把网址跑通（此时是本机模式，能直接用），
+再回头配 Supabase 填 `config.js`，改完再推一次。不用一次做完。
 
 ## 添加到主屏幕
 

@@ -12,9 +12,17 @@
       并且页面会先要求登录才能看到数据。
       建库步骤见 schema.sql 和 README.md。
 
-   注意：anon key 本来就是给浏览器用的公开 key，写在这里没问题，
+   SUPABASE_URL      控制台 Project Settings → Data API → Project URL
+                     形如 https://abcdefgh.supabase.co
+   SUPABASE_ANON_KEY 控制台 Project Settings → API Keys → Publishable key
+                     形如 sb_publishable_xxxxxxxx
+                     （老项目里这个东西叫 anon key，是一长串 eyJ... 开头的
+                       JWT，填哪个都行，作用完全一样）
+
+   注意：Publishable / anon key 本来就是设计成公开给浏览器用的，写在这里没问题，
    真正的保护来自 Supabase 的 RLS 策略（schema.sql 里已经配好）。
-   千万不要把 service_role key 写进来。
+   千万不要把 Secret key（sb_secret_... / service_role）写进来，
+   那个能绕过所有 RLS。
    ========================================================= */
 window.FRIDGE_CONFIG = {
   SUPABASE_URL: '',

@@ -183,8 +183,11 @@
     document.addEventListener('keydown', onKey);
 
     wire(back, close);
+    // 立刻聚焦，且只在弹层里还没有任何东西被聚焦时才做 ——
+    // 以前这里挂了个 30ms 的延时 focus，用户手快先点了别的框，
+    // 焦点会被硬拽回第一个输入框，后面敲的字就跑到名称栏里去了。
     var first = back.querySelector('input, select');
-    if (first) setTimeout(function () { first.focus(); }, 30);
+    if (first && !back.contains(document.activeElement)) first.focus();
     return close;
   }
 
@@ -246,11 +249,21 @@
       var hint = U.el('#f-hint', back);
       var newbox = U.el('#f-newbox', back);
 
+      // 用户一旦自己动过天数，就不能再被自动填充覆盖掉 —— 换成另一种食材时才重置。
+      // （典型场景：选了豆腐自动填 3 天，按包装改成 5 天，回头再碰一下名称框，
+      //   datalist 会再抛一个 change，5 天就被悄悄改回 3 天了。）
+      var daysTouched = false;
+      var lastName = null;
+
+      days.addEventListener('input', function () { daysTouched = true; });
+
       function sync() {
         var v = name.value.trim();
+        if (v !== lastName) { daysTouched = false; lastName = v; }
+
         var known = foods.filter(function (f) { return f.name === v; })[0];
         if (known) {
-          days.value = known.default_days;
+          if (!daysTouched) days.value = known.default_days;
           newbox.hidden = true;
           hint.textContent = '默认保质期 ' + known.default_days + ' 天（' + known.storage +
             '）。包装上写的和这个不一样，就直接改上面的天数，只影响这一份。';

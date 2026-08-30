@@ -231,7 +231,7 @@
 
   CloudBackend.prototype.init = function () {
     var self = this;
-    return import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm')
+    return import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.112.4/+esm')
       .then(function (mod) {
         self.sb = mod.createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY, {
           auth: { persistSession: true, autoRefreshToken: true }

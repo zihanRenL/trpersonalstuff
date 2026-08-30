@@ -111,8 +111,10 @@
     U.el('.sheet-x', back).addEventListener('click', close);
     document.addEventListener('keydown', onKey);
     wire(back, close);
+    // 立刻聚焦，且只在弹层里还没有任何东西被聚焦时才做 ——
+    // 延时 focus 会在用户已经点了别的输入框之后把焦点硬拽回来。
     var first = back.querySelector('input');
-    if (first) setTimeout(function () { first.focus(); }, 30);
+    if (first && !back.contains(document.activeElement)) first.focus();
   }
 
   function formBody(f, opts) {
