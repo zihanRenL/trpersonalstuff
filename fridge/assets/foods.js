@@ -86,7 +86,7 @@
 
   function failed(e) {
     console.error(e);
-    U.toast('操作失败：' + (e && e.message ? e.message : '请稍后再试'), { tone: 'warn' });
+    U.toast('操作失败：' + U.explainError(e), { tone: 'warn', duration: 14000 });
   }
 
   function openSheet(title, bodyHTML, wire) {

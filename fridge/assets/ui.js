@@ -18,6 +18,18 @@
       .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   };
 
+  /* 把后端的原始报错翻成"该去哪儿改" —— 这两种是配置没配完时唯一会碰到的 */
+  UI.explainError = function (e) {
+    var msg = (e && e.message) ? e.message : String(e || '');
+    if (/permission denied/i.test(msg)) {
+      return msg + '（数据库没给 authenticated 授权：去 Supabase 的 SQL Editor 跑一遍 schema.sql 里 GRANT 那一段）';
+    }
+    if (/schema cache|PGRST205|relation .* does not exist/i.test(msg)) {
+      return msg + '（表还没建：去 Supabase 的 SQL Editor 把 schema.sql 整个跑一遍）';
+    }
+    return msg || '请稍后再试';
+  };
+
   /* ---------------- 提示条（带撤销按钮） ---------------- */
 
   var toastTimer = null;
@@ -127,7 +139,10 @@
         .then(function () {
           return window.Store.mode === 'cloud' ? window.Store.seedIfEmpty() : null;
         })
-        .catch(function (e) { console.warn('[fridge] 预置食材写入跳过', e); })
+        .catch(function (e) {
+          console.warn('[fridge] 预置食材写入跳过', e);
+          UI.toast('预置食材没写进去：' + UI.explainError(e), { tone: 'warn', duration: 14000 });
+        })
         .then(function () { return start(); });
     }
 
