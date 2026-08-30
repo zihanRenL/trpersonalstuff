@@ -165,6 +165,26 @@
     return Promise.resolve();
   };
 
+  // 批量写入（只写还不存在的名字，已有的一律不动）
+  LocalBackend.prototype.bulkAddFoods = function (rows) {
+    var foods = this._foods();
+    var have = {};
+    foods.forEach(function (f) { have[f.name] = true; });
+    rows.forEach(function (r) {
+      if (have[r.name]) return;
+      foods.push({
+        id: uid(),
+        name: r.name,
+        default_days: normDays(r.default_days),
+        storage: normStorage(r.storage)
+      });
+      have[r.name] = true;
+    });
+    writeJSON(K_FOODS, foods);
+    this._emit();
+    return Promise.resolve();
+  };
+
   LocalBackend.prototype.listItems = function () {
     return Promise.resolve(this._items().slice());
   };
@@ -393,23 +413,17 @@
       });
   };
 
-  // 云端库是空的时候，把预置食材灌进去（只在第一次登录后发生一次）
-  CloudBackend.prototype.seedIfEmpty = function () {
+  // 批量写入。ignoreDuplicates 让同名的那条原样保留 ——
+  // 用户自己改过的默认天数不会被预置值盖掉。
+  CloudBackend.prototype.bulkAddFoods = function (rows) {
     var self = this;
-    return self.sb.from('food_defaults').select('id', { count: 'exact', head: true })
+    return self.sb.from('food_defaults')
+      .upsert(rows.map(function (r) {
+        return { name: r.name, default_days: normDays(r.default_days), storage: normStorage(r.storage) };
+      }), { onConflict: 'name', ignoreDuplicates: true })
       .then(function (res) {
         if (res.error) throw res.error;
-        if (res.count && res.count > 0) return false;
-        var rows = (window.SEED_FOODS || []).map(function (f) {
-          return { name: f.name, default_days: normDays(f.days), storage: normStorage(f.storage) };
-        });
-        if (!rows.length) return false;
-        return self.sb.from('food_defaults')
-          .upsert(rows, { onConflict: 'name', ignoreDuplicates: true })
-          .then(function (r2) {
-            if (r2.error) throw r2.error;
-            return true;
-          });
+        self._emit();
       });
   };
 
@@ -439,8 +453,31 @@
 
     signIn: function (email, pw) { return backend.signIn(email, pw); },
     signOut: function () { return backend.signOut(); },
+    /* 把预置清单里"还缺的"补进食材库，返回补了几条。
+       同名的一条都不碰，所以随时可以再点一次，不会覆盖你改过的天数。 */
+    seedAll: function () {
+      var seeds = (window.SEED_FOODS || []).map(function (f) {
+        return { name: f.name, default_days: f.days, storage: f.storage };
+      });
+      return backend.listFoods().then(function (existing) {
+        var have = {};
+        (existing || []).forEach(function (f) { have[f.name] = true; });
+        var missing = seeds.filter(function (s) { return !have[s.name]; });
+        if (!missing.length) return { added: 0, total: (existing || []).length };
+        return backend.bulkAddFoods(missing).then(function () {
+          return { added: missing.length, total: (existing || []).length + missing.length };
+        });
+      });
+    },
+
+    /* 开机时自动补齐：只在食材库完全空着的时候做，
+       避免把用户删掉的条目又塞回来。库里已经有东西了就交给
+       「食材库」页面上那颗「补齐预置食材」按钮，由用户自己决定。 */
     seedIfEmpty: function () {
-      return backend.seedIfEmpty ? backend.seedIfEmpty() : Promise.resolve(false);
+      return backend.listFoods().then(function (existing) {
+        if (existing && existing.length) return { added: 0, total: existing.length };
+        return Store.seedAll();
+      });
     },
 
     listFoods:  function () { return backend.listFoods(); },

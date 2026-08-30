@@ -8,6 +8,7 @@
 
   var S = window.Store, U = window.UI;
   var foods = [];
+  var missingSeeds = 0;
   var usedNames = {};
   var query = '';
   var filter = '全部';
@@ -36,7 +37,13 @@
       '</div>' +
 
       '<p class="count-note">这里存的是每种食材的<b>默认</b>保质期。改了只影响之后新加入的同名食材，' +
-        '已经在库存里的记录不受影响（要改某一份，去首页点那条的「改」）。</p>' +
+        '已经在库存里的记录不受影响（要改某一份，去首页点那条的「改」）。' +
+        (missingSeeds > 0
+          ? ' 预置清单里还有 ' + missingSeeds + ' 种没进来 —— ' +
+            '<button type="button" class="linkbtn" id="seed">补齐预置食材</button>' +
+            '（只补缺的，你改过的天数不会被覆盖）'
+          : '') +
+      '</p>' +
 
       '<div class="searchbar"><input id="q" type="search" placeholder="搜食材名" value="' + U.esc(query) + '"></div>' +
 
@@ -67,6 +74,23 @@
       var q2 = U.el('#q');
       q2.focus();
       try { q2.setSelectionRange(pos, pos); } catch (e) {}
+    });
+
+    var seedBtn = U.el('#seed');
+    if (seedBtn) seedBtn.addEventListener('click', function () {
+      seedBtn.disabled = true;
+      seedBtn.textContent = '补齐中…';
+      S.seedAll()
+        .then(function (r) {
+          return reload().then(function () {
+            U.toast(r.added ? '补进来 ' + r.added + ' 种，现在共 ' + r.total + ' 种' : '已经是齐的了');
+          });
+        })
+        .catch(function (e) {
+          seedBtn.disabled = false;
+          seedBtn.textContent = '补齐预置食材';
+          failed(e);
+        });
     });
 
     U.els('#filters .chip').forEach(function (c) {
@@ -212,6 +236,9 @@
   function reload() {
     return Promise.all([S.listFoods(), S.listItems()]).then(function (r) {
       foods = r[0] || [];
+      var have = {};
+      foods.forEach(function (f) { have[f.name] = true; });
+      missingSeeds = (window.SEED_FOODS || []).filter(function (sd) { return !have[sd.name]; }).length;
       usedNames = {};
       (r[1] || []).forEach(function (i) {
         if (i.status !== '已处理') usedNames[i.food_name] = (usedNames[i.food_name] || 0) + 1;
