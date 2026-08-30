@@ -25,6 +25,6 @@
    那个能绕过所有 RLS。
    ========================================================= */
 window.FRIDGE_CONFIG = {
-  SUPABASE_URL: '',
-  SUPABASE_ANON_KEY: ''
+  SUPABASE_URL: 'https://vaoonfnysedgyttxlbga.supabase.co',
+  SUPABASE_ANON_KEY: 'sb_publishable_lqSpt8MxW6Uqg4ZHuugX3A_1T0wfxtZ'
 };
