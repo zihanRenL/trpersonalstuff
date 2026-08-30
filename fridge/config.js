@@ -17,6 +17,7 @@
    千万不要把 service_role key 写进来。
    ========================================================= */
 window.FRIDGE_CONFIG = {
-  SUPABASE_URL: '',
-  SUPABASE_ANON_KEY: ''
+  SUPABASE_URL: 'https://vaoonfnysedgyttxlbga.supabase.co',
+  SUPABASE_ANON_KEY: 'trpersonalstuff/fridge
+/config.js'
 };
